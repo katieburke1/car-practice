@@ -20,9 +20,36 @@ export default function() {
           return {
             type: 'parts',
             id: attrs.id,
-            attributes: attrs
-          };
+            attributes: attrs,
+            relationships: {
+              items: {
+                data: {}
+              }
+            }
+          }
         });
+
+        let part = {
+          type: 'parts',
+           id: attrs.id,
+           attributes: attrs ,
+           relationships: {
+             items: {
+              data: {}
+             }
+           },
+        };
+
+
+      part.relationships.items.data = db.items
+        .where({part_id: attrs.id})
+        .map((attrs) => {
+          return {
+            type: 'items',
+            id: attrs.id,
+            attributes: attrs
+        };
+      });
 
     return car;
 
@@ -37,6 +64,7 @@ export default function() {
   this.get('/cars/:id', (db, request) => {
     let car = db.cars.find(request.params.id);
     let parts = db.parts.where({car_id: car.id});
+    let items = db.items.where({car_id: car.id});
 
     let data = {
       type: 'car',
@@ -63,6 +91,18 @@ export default function() {
       type: 'parts',
       id: request.params.id,
       attributes: part,
+    };
+
+    return { data };
+  });
+
+  this.get('items/:id', (db, request) => {
+    let item = db.parts.find(request.params.id);
+
+    let data = {
+      type: 'items',
+      id: request.params.id,
+      attributes: item,
     };
 
     return { data };

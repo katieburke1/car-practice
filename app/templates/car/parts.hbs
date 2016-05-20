@@ -1,9 +1,10 @@
 {{outlet}}
-Parts
-Hello
+
+<p> Model Name: {{model.name}} </p>
+<p> Model Id: {{model.id}} </p>
+
 <ul>
-  Model Name: {{model.name}}
-  Model Id: {{model.id}}
+
 
   {{#each model.parts as |part|}}
     <li class='part'>
